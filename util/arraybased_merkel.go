@@ -32,7 +32,7 @@
 // merkel-sid.go
 // @author Sidharth Mishra
 // @created Sat Oct 06 2018 20:38:39 GMT-0700 (PDT)
-// @last-modified Fri Oct 12 2018 01:39:54 GMT-0700 (PDT)
+// @last-modified Fri Oct 12 2018 01:48:51 GMT-0700 (PDT)
 //
 
 package util
@@ -70,6 +70,8 @@ func recursiveConstruct(leaves []string, roundLeafStartIndex int) []string {
 	}
 
 	// if the round has odd number of nodes, pair the last node with itself to even it out.
+	// Since it needs to pair for computing the hash till only one node remains (the root),
+	// the number of nodes in each round needs to be even –– expect the root node!
 	//
 	if leafCount%2 != 0 {
 		leaves = append(leaves, leaves[leafCount-1])
@@ -94,12 +96,6 @@ func (merkle *ArrayBasedMerkle) ComputeTree(hashes []Hashable) {
 	merkle.leaves = make([]string, len(hashes))
 	for index := 0; index < len(merkle.leaves); index++ {
 		merkle.leaves[index] = hashes[index].GetHash()
-	}
-
-	// merkle leaves should be even in count, only if it is just not a single leaf node.
-	//
-	if len(merkle.leaves)%2 != 0 && len(merkle.leaves) > 1 {
-		merkle.leaves = append(merkle.leaves, merkle.leaves[len(merkle.leaves)-1])
 	}
 
 	// compute the tree recursively, the last node is the root
