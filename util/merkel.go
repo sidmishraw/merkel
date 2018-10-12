@@ -2,6 +2,7 @@ package util
 
 import (
 	"crypto/sha256"
+	"fmt"
 	"log"
 )
 
@@ -35,12 +36,14 @@ type MTPath struct {
 
 // Hash - the hashing used for the merkle tree construction
 func Hash(text string) string {
+	// using sha256 hashing algorithm
+	//
 	sha := sha256.New()
 	_, err := sha.Write([]byte(text))
 	if err != nil {
 		log.Fatalln("failed to hash the value!")
 	}
-	return string(sha.Sum(nil))
+	return fmt.Sprintf("%x", sha.Sum(nil))
 }
 
 // MHash - merkle hashing of a pair of child hashes
